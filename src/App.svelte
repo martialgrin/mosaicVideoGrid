@@ -7,11 +7,9 @@
 	let firstRow, secondRow;
 
 	let numProjects = 8; // pairedNumberPlease
+	let generalMode = "horizontal";
 </script>
 
-<!-- <header>
-	<h1>THEY CAN DRAW, THEY CAN MOVE, BUT CAN THEY DANCE ?</h1>
-</header> -->
 <div id="app">
 	<div class="row" bind:this={firstRow} style="--numProjects:{numProjects};">
 		{#each projectsArray as project, i}

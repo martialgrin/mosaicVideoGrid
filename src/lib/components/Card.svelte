@@ -7,9 +7,8 @@
 
 	let isPlaying = false;
 
-	onMount(() => {});
+	const keyPressHandler = (e) => {};
 	const clickHandler = (e) => {
-		console.log(isPlaying);
 		cardElem.style.flexGrow = !isPlaying ? 10 : 0;
 		const otherElems = document.querySelectorAll(".card-video");
 		if (!isPlaying) {
@@ -75,6 +74,7 @@
 	style="--numProjects:{numProjects};"
 	class="card-video"
 	on:click={clickHandler}
+	on:keyup={keyPressHandler}
 >
 	<video
 		bind:this={videoElem}
@@ -86,7 +86,7 @@
 		playsinline
 	/>
 
-	<Description name={project.name} />
+	<!-- <Description name={project.name} {isPlaying} /> -->
 </div>
 
 <style>
