@@ -5,24 +5,26 @@
 	import { projectsArray } from "./lib/videosName";
 
 	let firstRow, secondRow;
+
+	let numProjects = 8; // pairedNumberPlease
 </script>
 
 <!-- <header>
 	<h1>THEY CAN DRAW, THEY CAN MOVE, BUT CAN THEY DANCE ?</h1>
 </header> -->
 <div id="app">
-	<div class="row" bind:this={firstRow}>
+	<div class="row" bind:this={firstRow} style="--numProjects:{numProjects};">
 		{#each projectsArray as project, i}
-			{#if i < 3}
-				<Card {project} row={firstRow} otherRow={secondRow} />
+			{#if i < numProjects / 2}
+				<Card {numProjects} {project} row={firstRow} otherRow={secondRow} />
 			{/if}
 		{/each}
 	</div>
 	<div id="break" />
-	<div class="row" bind:this={secondRow}>
+	<div class="row" bind:this={secondRow} style="--numProjects:{numProjects};">
 		{#each projectsArray as project, i}
-			{#if i >= 3}
-				<Card {project} row={secondRow} otherRow={firstRow} />
+			{#if i >= numProjects / 2}
+				<Card {numProjects} {project} row={secondRow} otherRow={firstRow} />
 			{/if}
 		{/each}
 	</div>
@@ -44,7 +46,10 @@
 		width: 100vw;
 		height: 50vh;
 		overflow: hidden;
-		grid-template-columns: repeat(3, calc(100vw / 3));
+		grid-template-columns: repeat(
+			calc(var(--numProjects) / 2),
+			calc(100vw / calc(var(--numProjects) / 2))
+		);
 		grid-template-rows: repeat(2, 50vh);
 	}
 </style>

@@ -17,9 +17,8 @@
 	.inner-container {
 		position: flex;
 	}
-
 	p {
-		font-family: "UnicaBold";
+		font-family: Helvetica, Arial, sans-serif;
 		font-size: 0.6rem;
 		color: white;
 		z-index: 10001;

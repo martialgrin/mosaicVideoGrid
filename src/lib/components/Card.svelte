@@ -2,7 +2,7 @@
 	import { onMount } from "svelte";
 	import Description from "./Description.svelte";
 
-	export let project, row, otherRow;
+	export let project, row, otherRow, numProjects;
 	let cardElem, videoElem;
 
 	let isPlaying = false;
@@ -48,15 +48,14 @@
 		for (let i in otherElems) {
 			if (otherElems[i] != cardElem) {
 				if (typeof otherElems[i] == "object") {
-					otherElems[i].style.width = !isPlaying ? "0px" : " calc(100vw / 3)";
+					otherElems[i].style.width = !isPlaying
+						? "0px"
+						: " calc(100vw / " + numProjects / 2 + ")";
 				}
 			} else {
 				cardElem.style.alignItems = !isPlaying ? "stretch" : "center";
 				if (project.mode == "vertical") {
-					// videoElem.style.width = "100vh";
-					// videoElem.style.height = "100vw";
 					otherElems[i].style.height = !isPlaying ? "100vh" : "50vh";
-
 					const rapport = window.innerWidth / window.innerHeight;
 					otherElems[i].style.transform = !isPlaying
 						? "scale(" + rapport + ")"
@@ -71,7 +70,12 @@
 	};
 </script>
 
-<div bind:this={cardElem} class="card-video" on:click={clickHandler}>
+<div
+	bind:this={cardElem}
+	style="--numProjects:{numProjects};"
+	class="card-video"
+	on:click={clickHandler}
+>
 	<video
 		bind:this={videoElem}
 		class="horizontal"
@@ -89,7 +93,7 @@
 	.card-video {
 		transition: all 1s ease;
 		transition-delay: 1s;
-		width: calc(100vw / 3);
+		width: calc(100vw / calc(var(--numProjects) / 2));
 		height: 50vh;
 		object-fit: cover;
 		overflow: hidden;
