@@ -1,111 +1,186 @@
 <script>
 	import { onMount } from "svelte";
 	import Description from "./Description.svelte";
+	import { createEventDispatcher } from "svelte";
+	import { select_option } from "svelte/internal";
 
-	export let project, row, otherRow, numProjects;
-	let cardElem, videoElem;
+	const dispatch = createEventDispatcher();
 
-	let isPlaying = false;
+	export let project,
+		row,
+		otherRow,
+		colOpen,
+		col,
+		numProjects,
+		id,
+		isOpen,
+		index,
+		isOpenIndex,
+		mutedMode,
+		qrCodeMode;
+	let cardElem, videoElem, imageElem;
 
-	const keyPressHandler = (e) => {};
-	const clickHandler = (e) => {
-		cardElem.style.flexGrow = !isPlaying ? 10 : 0;
-		const otherElems = document.querySelectorAll(".card-video");
-		if (!isPlaying) {
-			videoElem.pause();
-			setTimeout(() => {
-				if (project.mode == "vertical") {
-					videoElem.style.transform = isPlaying
-						? "rotate(0deg)"
-						: "rotate(90deg)";
-				}
-				setTimeout(
-					() => {
-						videoElem.currentTime = 0;
-						videoElem.muted = !isPlaying ? false : true;
-						videoElem.play();
-						isPlaying = !isPlaying;
-					},
-					project.mode == "vertical" ? 2000 : 1000
-				);
-				videoElem.style.objectFit = !isPlaying ? "contain" : "cover";
-			}, 2000);
-		} else {
-			if (project.mode == "vertical") {
-				videoElem.style.transform = isPlaying
-					? "rotate(0deg)"
-					: "rotate(90deg)";
-			}
-			videoElem.muted = !isPlaying ? false : true;
-			videoElem.play();
-			setTimeout(() => {
-				videoElem.style.objectFit = !isPlaying ? "contain" : "cover";
-				isPlaying = false;
-			}, 3000);
-		}
+	let timeOutFit = null;
+	let timeOutPlay = null;
+	let timeOutRemoveImage = null;
+	let openDescription = false;
+	let descriptionHasBeenOpened = false;
 
-		for (let i in otherElems) {
-			if (otherElems[i] != cardElem) {
-				if (typeof otherElems[i] == "object") {
-					otherElems[i].style.width = !isPlaying
-						? "0px"
-						: " calc(100vw / " + numProjects / 2 + ")";
-				}
+	const videoState = (state) => {
+		console.log("videoState", state);
+
+		if (typeof videoElem != "undefined" && videoElem != null) {
+			if (state == true) {
+				// timeOutFit = setTimeout(() => {
+				// 	videoElem.style.objectFit = "contain";
+				// }, 2000);
+
+				timeOutRemoveImage = setTimeout(() => {
+					imageElem.style.display = "none";
+				}, 4000);
+				timeOutPlay = setTimeout(() => {
+					videoElem.currentTime = 0;
+					videoElem.muted = false;
+					videoElem.play();
+				}, 4000);
 			} else {
-				cardElem.style.alignItems = !isPlaying ? "stretch" : "center";
-				if (project.mode == "vertical") {
-					otherElems[i].style.height = !isPlaying ? "100vh" : "50vh";
-					const rapport = window.innerWidth / window.innerHeight;
-					otherElems[i].style.transform = !isPlaying
-						? "scale(" + rapport + ")"
-						: "scale(1)";
-				} else {
-					otherElems[i].style.height = !isPlaying ? "100vh" : "50vh";
-				}
-				otherRow.style.height = !isPlaying ? "0vh" : "50vh";
-				row.style.height = !isPlaying ? "100vh" : "50vh";
+				videoElem.muted = true;
+				videoElem.style.objectFit = "cover";
 			}
 		}
+	};
+
+	const muteVideo = () => {
+		console.log("mute");
+		if (typeof videoElem != "undefined" && videoElem != null) {
+			videoElem.muted = true;
+		}
+	};
+
+	$: {
+		if (isOpen == true) {
+			descriptionHasBeenOpened = false;
+			clearTimeout(timeOutFit);
+			clearTimeout(timeOutPlay);
+			clearTimeout(timeOutRemoveImage);
+
+			muteVideo();
+			videoState(true);
+		} else {
+			descriptionHasBeenOpened = false;
+			clearTimeout(timeOutFit);
+			clearTimeout(timeOutPlay);
+			clearTimeout(timeOutRemoveImage);
+
+			muteVideo();
+			videoState(false);
+		}
+	}
+
+	const videoIsFinished = () => {
+		if (!descriptionHasBeenOpened && isOpen) {
+			descriptionHasBeenOpened = true;
+			openDescription = true;
+			setTimeout(() => {
+				relaunchMutedVideo();
+			}, 5000);
+		} else {
+			relaunchMutedVideo();
+		}
+	};
+
+	const relaunchMutedVideo = () => {
+		videoElem.currentTime = 0;
+		videoElem.play();
+		videoElem.muted = true;
+		openDescription = false;
 	};
 </script>
 
 <div
 	bind:this={cardElem}
-	style="--numProjects:{numProjects};"
-	class="card-video"
-	on:click={clickHandler}
-	on:keyup={keyPressHandler}
+	class={isOpenIndex != index && isOpenIndex != null && colOpen != col
+		? "card-video hide-other-col"
+		: isOpenIndex != index && isOpenIndex != null
+			? "card-video hide"
+			: isOpen
+				? "card-video open"
+				: "card-video"}
+	{id}
+	on:click
 >
 	<video
+		on:loadeddata={videoElem.play()}
 		bind:this={videoElem}
 		class="horizontal"
-		src="./videos/{project.srcVideo}"
-		loop
-		autoplay
+		src="./videos/{project.srcVideo}.mp4"
+		on:ended={() => {
+			videoIsFinished();
+		}}
+		autoplay={false}
 		muted
 		playsinline
 	/>
 
-	<!-- <Description name={project.name} {isPlaying} /> -->
+	{#if openDescription}
+		<Description
+			projectName={project.projectName}
+			name={project.name}
+			qrCode={project.qrCode}
+		/>
+	{/if}
+	<!-- <img
+		bind:this={imageElem}
+		src="./pictures/{project.srcImage}"
+		alt={project.projectName}
+	/> -->
 </div>
 
 <style>
+	.card-video.hide {
+		width: 100vw !important;
+		height: 0 !important;
+		transition-property: height;
+		transition-timing-function: ease-out;
+		transition-duration: 1s;
+		transition-delay: 2s;
+	}
+	.card-video.hide-other-col {
+		width: 0 !important;
+		height: 100 !important;
+		transition-property: height, width;
+		transition-timing-function: ease-out;
+		transition-duration: 1s, 1s;
+		transition-delay: 1.5s, 1s;
+	}
 	.card-video {
-		transition: all 1s ease;
-		transition-delay: 1s;
-		width: calc(100vw / calc(var(--numProjects) / 2));
-		height: 50vh;
+		transition-property: height, width;
+		transition-timing-function: ease-out;
+		transition-duration: 1s, 1s;
+		transition-delay: 0s, 0s;
+		width: 100%;
+		height: 100%;
+		min-width: 100%;
 		object-fit: cover;
 		overflow: hidden;
 		background-size: cover;
 		display: flex;
 		justify-content: center;
 		align-items: center;
+		position: relative;
 	}
+
 	video {
-		transition: transform 1s ease;
-		min-width: 100%;
+		width: 100%;
+		transition: all 1s ease;
+		min-width: 33.33vw;
 		min-height: 100%;
 		object-fit: cover;
+	}
+	img {
+		position: absolute;
+		object-fit: cover;
+		width: 100%;
+		min-height: 100%;
 	}
 </style>

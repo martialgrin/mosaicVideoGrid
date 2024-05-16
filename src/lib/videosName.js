@@ -1,32 +1,40 @@
 export const projectsArray = [
 	{
 		name: "Elena Biasi - Emilie Maier",
-		srcVideo: "1.mp4",
-		mode: "horizontal",
+		srcVideo: "3",
+		projectName: "FaceOff",
+		srcImage: "3.jpg",
 	},
 	{
-		name: "Thomas Gaudin - Mathias Liniger",
-		srcVideo: "2.mp4",
-		mode: "horizontal",
+		name: "Aryana Noorani - Livia Schmidt",
+		srcVideo: "1",
+		projectName: "PUND",
+		srcImage: "1.png",
 	},
 	{
-		name: "Quentin Kohler - Mehdin Talovic - Charlotte Waridel",
-		srcVideo: "3.mp4",
-		mode: "horizontal",
+		name: "Olivia Capol - Thomas Gaudin",
+		srcVideo: "2",
+		projectName: "Loco Land",
+		srcImage: "2.jpg",
 	},
+
 	{
-		name: "Olivia Capol - Alexine Sierro",
-		srcVideo: "4.mp4",
-		mode: "horizontal",
+		projectName: "AdSmash",
+		name: "Quentin Kohler - Mathias Linigier",
+		srcVideo: "5",
+		srcImage: "5.jpg",
 	},
+
 	{
 		name: "Baptiste Godart - Valère Zen-Ruffinen",
-		srcVideo: "5.mp4",
-		mode: "horizontal",
+		srcVideo: "6",
+		projectName: "Fume",
+		srcImage: "6.JPG",
 	},
 	{
-		name: " Livia Mayer - Aryana Noorani",
-		srcVideo: "6.mp4",
-		mode: "horizontal",
+		name: "Charlotte Waridel - Alexine Sierro",
+		srcVideo: "4",
+		projectName: "Real Fight",
+		srcImage: "4.png",
 	},
 ];
