@@ -10,7 +10,7 @@
 	const numProjectsLength = projectsArray.length;
 
 	let numProjects = numProjectsLength; // pairedNumberPlease
-	let numColumns = 3;
+	let numColumns = 4;
 	let videosExtension = "mp4";
 	let isOpen = null;
 	let colOpen = null;

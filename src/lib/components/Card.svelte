@@ -114,7 +114,7 @@
 		bind:this={videoElem}
 		class="horizontal"
 		src="./videos/{project.srcVideo}.mp4"
-		on:ended={() => {
+		on:ended={() => {	
 			videoIsFinished();
 		}}
 		autoplay={false}
@@ -129,11 +129,11 @@
 			qrCode={project.qrCode}
 		/>
 	{/if}
-	<!-- <img
+	<img
 		bind:this={imageElem}
 		src="./pictures/{project.srcImage}"
 		alt={project.projectName}
-	/> -->
+	/>
 </div>
 
 <style>
