@@ -31,8 +31,6 @@
 
 		if (typeof videoElem != "undefined" && videoElem != null) {
 			if (state == true) {
-	
-
 				timeOutRemoveImage = setTimeout(() => {
 					imageElem.style.display = "none";
 				}, 4000);
