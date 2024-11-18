@@ -31,9 +31,7 @@
 
 		if (typeof videoElem != "undefined" && videoElem != null) {
 			if (state == true) {
-				// timeOutFit = setTimeout(() => {
-				// 	videoElem.style.objectFit = "contain";
-				// }, 2000);
+	
 
 				timeOutRemoveImage = setTimeout(() => {
 					imageElem.style.display = "none";
@@ -110,11 +108,10 @@
 	on:click
 >
 	<video
-		on:loadeddata={videoElem.play()}
 		bind:this={videoElem}
 		class="horizontal"
 		src="./videos/{project.srcVideo}.mp4"
-		on:ended={() => {	
+		on:ended={() => {
 			videoIsFinished();
 		}}
 		autoplay={false}
